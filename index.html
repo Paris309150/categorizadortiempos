@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro SAR</title>
+    <title>Registro de Tiempos en SAR</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,44 +11,36 @@
             background-color: #f9f9f9;
             color: #333;
         }
+        /* Clases especiales para colorear */
+        .pediatric-avg {
+            background-color: lightblue;
+        }
+        .adult-avg {
+            background-color: lightgreen;
+        }
+
         h1, h2 {
             text-align: center;
             color: #0056b3;
         }
         p {
             text-align: center;
-            max-width: 800px;
-            margin: 0 auto 20px;
+            font-size: 16px;
             color: #555;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
         }
         form {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 10px;
             margin-bottom: 20px;
-            padding: 10px;
+            padding: 15px;
             background-color: #e9ecef;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        form label {
-            margin: auto 0;
-        }
-        form select, form input, form button {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        form button {
-            background-color: #0056b3;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        form button:hover {
-            background-color: #004494;
+            flex-wrap: wrap;
         }
         table {
             width: 100%;
@@ -68,26 +60,6 @@
             background-color: #0056b3;
             color: white;
         }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        #clearButton, #downloadButton {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #d9534f;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        #clearButton:hover, #downloadButton:hover {
-            background-color: #c9302c;
-        }
         .pagination {
             display: flex;
             justify-content: center;
@@ -102,8 +74,26 @@
             cursor: pointer;
             border-radius: 4px;
         }
-        .pagination button:hover {
-            background-color: #004494;
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .buttons-container button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #clearButton {
+            background-color: #d9534f;
+            color: white;
+        }
+        #downloadButton {
+            background-color: #c9302c;
+            color: white;
         }
         footer {
             text-align: center;
@@ -111,18 +101,18 @@
             font-size: 14px;
             color: #555;
         }
+
     </style>
 </head>
 <body>
     <h1>Registro de Tiempos en SAR</h1>
-    <p>Esta herramienta permite registrar los tiempos de atención en el Servicio de Atención de Urgencia (SAR). 
-    Proporciona un resumen de los datos ingresados, incluyendo la cantidad de pacientes, el tiempo total y el tiempo promedio por categoría. 
-    Además, permite visualizar el listado de ingresos con paginación y descargar los datos en un archivo.</p>
+    <p>Este sistema permite registrar y visualizar los tiempos de atención en un Servicio de Atención de Urgencias (SAR). 
+       Permite ingresar datos como el DAU, la categoría del paciente, la edad, la hora de inicio y fin de la atención. 
+       El sistema genera un resumen de los tiempos promedios por categoría, además de un historial de los ingresos con paginación.</p>
 
     <form id="entryForm">
         <label for="dau">DAU:</label>
         <input type="text" id="dau" placeholder="Ejemplo: 50900062" required>
-
         <label for="category">Categoría:</label>
         <select id="category" required>
             <option value="">Seleccione</option>
@@ -132,21 +122,18 @@
             <option value="C4">C4</option>
             <option value="C5">C5</option>
         </select>
-
         <label for="age">Edad:</label>
         <select id="age" required>
             <option value="">Seleccione</option>
-            <option value=">15">Adulto</option>
-            <option value="<=15">Pediátrico</option>
+            <option value="Adulto">Adulto</option>
+            <option value="Pediátrico">Pediátrico</option>
         </select>
-
         <label for="startTime">Hora de inicio:</label>
         <input type="time" id="startTime" required>
-
         <label for="endTime">Hora de fin:</label>
         <input type="time" id="endTime" required>
-
         <button type="submit">Agregar</button>
+       
     </form>
 
     <h2>Resumen General</h2>
@@ -154,9 +141,11 @@
         <thead>
             <tr>
                 <th>Categoría</th>
-                <th>Total Pacientes</th>
-                <th>Tiempo Total</th>
-                <th>Tiempo Promedio</th>
+                <th>Total Pacientes Pediátricos</th>
+                <th>Tiempo Promedio Pediátrico</th>
+                <th>Total Pacientes Adultos</th>
+                <th>Tiempo Promedio Adulto</th>
+                
             </tr>
         </thead>
         <tbody id="summaryTable"></tbody>
@@ -172,6 +161,7 @@
                 <th>Hora Inicio</th>
                 <th>Hora Fin</th>
                 <th>Tiempo Total</th>
+                <th>Eliminar</th>
             </tr>
         </thead>
         <tbody id="paginatedTable"></tbody>
@@ -181,11 +171,14 @@
         <button onclick="nextPage()">Siguiente</button>
     </div>
 
-    <button id="clearButton">Limpiar Todo</button>
-    <button id="downloadButton">Descargar Datos</button>
+    <div class="buttons-container">
+        <button id="clearButton">Limpiar Todo</button>
+        <button id="downloadButton">Descargar Datos</button>
+    </div>
 
     <footer>
         Creado por Matías Bustos - Zipper
     </footer>
+    <script src="script.js"></script>
 </body>
 </html>
