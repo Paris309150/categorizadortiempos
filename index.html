@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,18 +12,21 @@
             background-color: #f9f9f9;
             color: #333;
         }
-        /* Clases especiales para colorear */
+
         .pediatric-avg {
             background-color: lightblue;
         }
+
         .adult-avg {
             background-color: lightgreen;
         }
 
-        h1, h2 {
+        h1,
+        h2 {
             text-align: center;
             color: #0056b3;
         }
+
         p {
             text-align: center;
             font-size: 16px;
@@ -30,6 +34,7 @@
             max-width: 800px;
             margin: 0 auto 20px auto;
         }
+
         form {
             display: flex;
             justify-content: center;
@@ -42,6 +47,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             flex-wrap: wrap;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -51,20 +57,25 @@
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 12px;
             text-align: center;
         }
+
         th {
             background-color: #0056b3;
             color: white;
         }
+
         .pagination {
             display: flex;
             justify-content: center;
             margin-top: 10px;
         }
+
         .pagination button {
             margin: 0 5px;
             padding: 8px 12px;
@@ -74,12 +85,14 @@
             cursor: pointer;
             border-radius: 4px;
         }
+
         .buttons-container {
             display: flex;
             justify-content: center;
             gap: 10px;
             margin-top: 20px;
         }
+
         .buttons-container button {
             padding: 10px 15px;
             border: none;
@@ -87,28 +100,43 @@
             cursor: pointer;
             font-size: 14px;
         }
+
         #clearButton {
             background-color: #d9534f;
             color: white;
         }
+
         #downloadButton {
             background-color: #c9302c;
             color: white;
         }
+
+        #totalPatientsContainer {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
         footer {
             text-align: center;
             margin-top: 20px;
             font-size: 14px;
             color: #555;
         }
-
     </style>
 </head>
+
 <body>
     <h1>Registro de Tiempos en SAR</h1>
-    <p>Este sistema permite registrar y visualizar los tiempos de atención en un Servicio de Atención de Urgencias (SAR). 
-       Permite ingresar datos como el DAU, la categoría del paciente, la edad, la hora de inicio y fin de la atención. 
-       El sistema genera un resumen de los tiempos promedios por categoría, además de un historial de los ingresos con paginación.</p>
+    <p>Este sistema permite registrar y visualizar los tiempos de atención en un Servicio de Atención de Urgencias
+        (SAR).
+        Permite ingresar datos como el DAU, la categoría del paciente, la edad, la hora de inicio y fin de la atención.
+        El sistema genera un resumen de los tiempos promedios por categoría, además de un historial de los ingresos con
+        paginación.</p>
 
     <form id="entryForm">
         <label for="dau">DAU:</label>
@@ -133,7 +161,6 @@
         <label for="endTime">Hora de fin:</label>
         <input type="time" id="endTime" required>
         <button type="submit">Agregar</button>
-       
     </form>
 
     <h2>Resumen General</h2>
@@ -145,7 +172,6 @@
                 <th>Tiempo Promedio Pediátrico</th>
                 <th>Total Pacientes Adultos</th>
                 <th>Tiempo Promedio Adulto</th>
-                
             </tr>
         </thead>
         <tbody id="summaryTable"></tbody>
@@ -166,10 +192,14 @@
         </thead>
         <tbody id="paginatedTable"></tbody>
     </table>
+
     <div class="pagination">
         <button onclick="prevPage()">Anterior</button>
         <button onclick="nextPage()">Siguiente</button>
     </div>
+
+    <!-- NUEVO APARTADO PARA MOSTRAR TOTAL DE PACIENTES -->
+    <div id="totalPatientsContainer">Pacientes Totales: 0</div>
 
     <div class="buttons-container">
         <button id="clearButton">Limpiar Todo</button>
@@ -179,6 +209,8 @@
     <footer>
         Creado por Matías Bustos - Zipper
     </footer>
+
     <script src="script.js"></script>
 </body>
+
 </html>
